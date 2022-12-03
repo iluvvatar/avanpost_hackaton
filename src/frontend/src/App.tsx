@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import './App.css';
 import {Layout} from "antd";
-import VersionList from "./components/VersionList";
+import VersionList from "./components/VersionList/VersionList";
 import {v1} from "uuid";
 import {Route, Routes} from "react-router-dom";
 import VersionPage from "./pages/VirsionPage/VersionPage";
@@ -33,7 +33,7 @@ function App() {
     }
 
     return (
-        <Layout>
+        <Layout className='app-container'>
             <Content>
                 <Routes>
                     <Route path="/" element={
@@ -44,7 +44,7 @@ function App() {
                     }/>
                 </Routes>
             </Content>
-            <Footer>Footer</Footer>
+            <Footer>team: Panic! At the kernel for avanpost_hackaton(c)</Footer>
         </Layout>
     )
 }
