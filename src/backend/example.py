@@ -1,7 +1,7 @@
 import os
 import time
 from subprocess import Popen, PIPE
-from events import ProgressCheckerThread
+from subprocesses.events import ProgressCheckerThread
 
 CUSTOM_PYTHON_PATH = os.getenv('CUSTOM_PYTHON_PATH')
 

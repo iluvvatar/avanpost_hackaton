@@ -9,7 +9,7 @@ from events import update_progress, update_progress_done
 import time  # DEBUG
 
 GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
-MOCKED_DATA_PATH = 'mocked_image_search_response.json'
+MOCKED_DATA_PATH = 'data/mocked_image_search_response.json'
 
 
 def mocked(search):
