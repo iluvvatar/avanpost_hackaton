@@ -18,17 +18,17 @@ class CreateVersionRequest(BaseRequest):
 
 
 class PredictImageRequest(BaseRequest):
-    # TODO
-    # image: str = request_field(
-    #     location=ERequestLocation.QUERY,
-    #     description="Image BLOB",
-    #     required=True
-    # )
-    pass
+    image_url: str = request_field.FromMsh(
+        msh.fields.Url(),
+        location=ERequestLocation.QUERY,
+        description="Url to download an image",
+        required=True
+    )
 
 
 class TestModelRequest(BaseRequest):
-    data_url: str = request_field(
+    data_url: str = request_field.FromMsh(
+        msh.fields.Url(),
         location=ERequestLocation.QUERY,
         description=(
             "Url to labeled dataset. "

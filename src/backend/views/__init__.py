@@ -113,7 +113,7 @@ class PredictImageView(web.View, CorsViewMixin):
             },
         },
     )
-    # @requests.request_schema(requests.PredictImageRequest)
+    @requests.request_schema(requests.PredictImageRequest)
     async def get(self) -> web.Response:
         data = {"label": "cat", "probability": 100}
         meta = {}
