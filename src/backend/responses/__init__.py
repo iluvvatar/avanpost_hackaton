@@ -21,6 +21,7 @@ class DownloadProgressResponse(DataClass):
 class PredictImageResponse(DataClass):
 
     class LearnProgressData(DataClass):
+        image_url: str
         label: str
         probability: float
 

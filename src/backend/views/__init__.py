@@ -115,7 +115,7 @@ class PredictImageView(web.View, CorsViewMixin):
     )
     @requests.request_schema(requests.PredictImageRequest)
     async def get(self) -> web.Response:
-        data = {"label": "cat", "probability": 100}
+        data = {"image_url": "http://localhost", "label": "cat", "probability": 100}
         meta = {}
         return web.json_response(dict(data=data, meta=meta))
 
