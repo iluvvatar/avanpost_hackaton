@@ -1,4 +1,5 @@
 import click
+from .collect import get_images_from_google
 
 
 def update_progress_error(message: str):
@@ -17,7 +18,7 @@ def generate_dataset(path: str,
                      class_name: str,
                      num_docs: int,
                      drawn_ratio: float):
-    print(drawn_ratio)
+    get_images_from_google(path, class_name, num_docs, drawn_ratio)
     for i in range(10):
         update_progress(0.1 * i)
 
@@ -28,8 +29,8 @@ def generate_dataset(path: str,
 @click.command()
 @click.option('--path', required=True)
 @click.option('--class-name', required=True)
-@click.option('--num-docs', default=500, type=int)
-@click.option('--drawn-ratio', default=0.1, type=float)
+@click.option('--num-docs', default=10, type=int)
+@click.option('--drawn-ratio', default=0.0, type=float)
 def main(path, class_name, num_docs, drawn_ratio):
     generate_dataset(path, class_name, num_docs, drawn_ratio)
 
