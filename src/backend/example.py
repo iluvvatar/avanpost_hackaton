@@ -1,7 +1,9 @@
-from subprocess import Popen, PIPE
+import os
 import time
+from subprocess import Popen, PIPE
 from events import ProgressCheckerThread
 
+CUSTOM_PYTHON_PATH = os.getenv('CUSTOM_PYTHON_PATH')
 
 cmd = [
     'python3',
@@ -13,7 +15,10 @@ cmd = [
     './data'
 ]
 
-p = Popen(cmd, stdout=PIPE)
+custom_env = os.environ.copy()
+custom_env['PYTHONPATH'] = CUSTOM_PYTHON_PATH
+
+p = Popen(cmd, stdout=PIPE, env=custom_env)
 
 thread = ProgressCheckerThread(p)
 thread.start()
