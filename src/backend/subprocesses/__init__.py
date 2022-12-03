@@ -2,9 +2,8 @@ import os
 from subprocess import Popen, PIPE
 
 from backend.subprocesses.events import ProgressCheckerThread
+from backend.config import STORAGE_PATH, ORIG_STORAGE_PATH
 
-STORAGE_PATH = os.getenv('STORAGE_PATH')
-ORIG_STORAGE_PATH = os.path.join(STORAGE_PATH, 'orig')
 
 Process = {
     'DOWNLOAD_IMAGE': None,

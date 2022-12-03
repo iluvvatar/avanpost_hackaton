@@ -7,13 +7,8 @@ import shutil
 import uuid
 import time  # DEBUG
 
-
 from backend.subprocesses.events import update_progress, update_progress_done
-
-GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
-MOCKED_DATA_PATH = os.path.join(os.getenv('STORAGE_PATH'),
-                                'mocked_image_search_response.json')
-
+from backend.config import MOCKED_DATA_PATH, GOOGLE_API_KEY
 
 def mocked(search):
     def const(*args, **kwargs):
