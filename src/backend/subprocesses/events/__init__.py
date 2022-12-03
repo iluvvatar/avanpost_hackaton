@@ -10,8 +10,8 @@ class ProgressCheckerThread(threading.Thread):
         self.progress = 0.0
         self.process = process
         self.result = None
-        super().__init__()
         self.callback = callback
+        super().__init__()
 
     def run(self):
         for line in io.TextIOWrapper(iter(self.process.stdout),

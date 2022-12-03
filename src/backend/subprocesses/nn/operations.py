@@ -10,8 +10,8 @@ def predict_single(muid, filename):
 
 
 def predict():
-    pass
+    update_progress_done(json.dumps({'snowboard': {'precision': 0.9, 'recall': 0.6}}))
 
 
 def retrain():
-    pass
+    update_progress_done(json.dumps({'umid': 'm666'}))

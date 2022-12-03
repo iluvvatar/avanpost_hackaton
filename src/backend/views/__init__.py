@@ -122,11 +122,11 @@ class PredictImageView(web.View, CorsViewMixin):
         prediction = None
 
         def on_downloaded():
-            predict_single(umid, callback=None, non_blocking=False)
+            predict_single(umid, callback=None, blocking=True)
             nonlocal prediction
-            prediction = Process.PREDICT_SINGLE.result
+            prediction = Process['PREDICT_SINGLE'].result
 
-        download_image(image_url, on_downloaded, non_blocking=False)
+        download_image(image_url, callback=on_downloaded, blocking=True)
         data = {
             "image_url": image_url,
             "label": prediction["label"],
