@@ -1,9 +1,10 @@
 import React, {useState} from "react";
-import {Version} from "../../App";
+import {NewVersionFormValueTypes, Version} from "../../App";
 import {Link} from "react-router-dom";
 import {List, Button} from "antd";
-import AddVersionModal from "../AddVersionModal";
+import AddVersionModal from "./AddVersionModal";
 import classes from './VersionList.module.css'
+import UploadTestImage from "./UploadTestImage";
 
 
 interface VersionListProps {
@@ -11,16 +12,17 @@ interface VersionListProps {
 }
 
 const VersionList: React.FC<VersionListProps> = (props) => {
-
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const [addFormValues, setAddFormValues] = useState<NewVersionFormValueTypes>()
 
     const showModal = () => {
         setIsModalOpen(true);
     };
-    const handleOk = () => {
+    const handleModalOk = (values: NewVersionFormValueTypes) => {
+        setAddFormValues(values);
         setIsModalOpen(false);
     };
-    const handleCancel = () => {
+    const handleModalCancel = () => {
         setIsModalOpen(false);
     };
 
@@ -42,10 +44,11 @@ const VersionList: React.FC<VersionListProps> = (props) => {
                     </List.Item>
                 )}
             />
+            <UploadTestImage/>
             <AddVersionModal
-                onOk={handleOk}
-                onCancel={handleCancel}
                 isModalOpen={isModalOpen}
+                onOk={handleModalOk}
+                onCancel={handleModalCancel}
             />
         </>
     )
