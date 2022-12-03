@@ -193,6 +193,6 @@ class TestModelProgressView(web.View, CorsViewMixin):
         },
     )
     async def get(self) -> web.Response:
-        data = {"metrics": {"accuracy": 100, "f1": 1}}
+        data = {"img1": ["cat"], "img2": [], "img3": ["cat", "dog"]}
         meta = {"status": responses.EProgressStatus.COMPLETED.value, "percentile": 100}
         return web.json_response(dict(data=data, meta=meta))
