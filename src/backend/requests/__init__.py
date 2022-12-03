@@ -3,7 +3,7 @@ import marshmallow as msh
 from backend.requests.base import BaseRequest, request_field, Enum, ERequestLocation, request_schema
 
 
-class CreateVersionRequest(BaseRequest):
+class NewVersionRequest(BaseRequest):
     label: str = request_field(
         location=ERequestLocation.QUERY,
         description="Class label",
@@ -18,6 +18,11 @@ class CreateVersionRequest(BaseRequest):
 
 
 class PredictImageRequest(BaseRequest):
+    model_version: str = request_field(
+        location=ERequestLocation.QUERY,
+        description="Model version to use for evaluation",
+        required=True
+    )
     image_url: str = request_field.FromMsh(
         msh.fields.Url(),
         location=ERequestLocation.QUERY,
@@ -27,6 +32,11 @@ class PredictImageRequest(BaseRequest):
 
 
 class TestModelRequest(BaseRequest):
+    model_version: str = request_field(
+        location=ERequestLocation.QUERY,
+        description="Model version to use for evaluation",
+        required=True
+    )
     data_url: str = request_field.FromMsh(
         msh.fields.Url(),
         location=ERequestLocation.QUERY,

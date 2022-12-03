@@ -63,8 +63,10 @@ class Application(web.Application):
 
     def _setup_routes(self) -> None:
         self.router.add_view(r"/api/v1/ping", views.PingView)
-        self.router.add_view(r"/api/v1/versions", views.VersionsView)
-        self.router.add_view(r"/api/v1/progress/learn", views.LearnProgressView)
-        self.router.add_view(r"/api/v1/progress/download", views.DownloadProgressView)
+        self.router.add_view(r"/api/v1/versions/list", views.VersionsListView)
+        self.router.add_view(r"/api/v1/versions/new", views.NewVersionView)
         self.router.add_view(r"/api/v1/predict", views.PredictImageView)
         self.router.add_view(r"/api/v1/test", views.TestModelView)
+        self.router.add_view(r"/api/v1/progress/learn", views.LearnProgressView)
+        self.router.add_view(r"/api/v1/progress/download", views.DownloadProgressView)
+        self.router.add_view(r"/api/v1/progress/test", views.TestModelProgressView)
