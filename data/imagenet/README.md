@@ -24,7 +24,6 @@ n04228054 ski
 6.  грузовик
 n03417042 garbage truck, dustcart
 n04467665 trailer truck, tractor trailer, trucking rig, rig, articulated lorry, semi
-n04461696 tow truck, tow car, wrecker # TODO: либо грузовик, либо самосвал - что-то одно
 
 7.  микроавтобус (газель)
 # TODO: херня, газели нет
@@ -42,3 +41,11 @@ n04461696 tow truck, tow car, wrecker
 10. лошадь
 # TODO: надо добавить лошадей без повозок
 n03538406 horse cart, horse-cart
+
+11. unknownn
+n02980441 castle
+n02093991 Irish terrier
+n04409515 tennis ball
+
+12. танк (дополнительный тестовый класс)
+n04389033 tank, army tank, armored combat vehicle, armoured combat vehicle
