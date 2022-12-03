@@ -1,29 +1,28 @@
 import React from "react";
-import {Form, Input, Modal} from "antd";
+import {Button, Form, Input} from "antd";
 import {NewVersionFormValueTypes} from "../../App";
+import InfoBar from "../../components/InfoBar/InfoBar";
+import classes from './LearnPage.module.css'
+import {ArrowLeftOutlined} from "@ant-design/icons";
+import {NavLink} from "react-router-dom";
 
-interface AddVersionModalProps {
-    isModalOpen: boolean
-    onOk: (values: any) => void
-    onCancel: () => void
+interface LearnPagePropsType {
+
 }
 
-const AddVersionModal: React.FC<AddVersionModalProps> = (props) => {
+const LearnPage: React.FC<LearnPagePropsType> = (props) => {
     const [form] = Form.useForm();
 
     const onFinish = (values: any) => {
         console.log('Success:', values);
     };
-
     const onFinishFailed = (errorInfo: any) => {
         console.log('Failed:', errorInfo);
     };
-
-    const onModalOkHandler = () => {
+    const onSubmitHandler = () => {
         form.validateFields()
             .then((values: NewVersionFormValueTypes) => {
                 console.log(values)
-                props.onOk(values);
                 form.resetFields();
             })
             .catch((info) => {
@@ -32,16 +31,18 @@ const AddVersionModal: React.FC<AddVersionModalProps> = (props) => {
     }
 
     return (
-        <Modal title="New version"
-               open={props.isModalOpen}
-               onOk={onModalOkHandler}
-               onCancel={props.onCancel}
+        <div className={classes.container}
         >
-
+            <NavLink to='/'>
+                <div className={classes.backBtn}>
+                    <ArrowLeftOutlined/>
+                </div>
+            </NavLink>
             <Form form={form}
                   onFinish={onFinish}
                   onFinishFailed={onFinishFailed}
                   autoComplete="off"
+                  className={classes.form}
             >
                 <Form.Item label="Title"
                            name="title"
@@ -55,10 +56,13 @@ const AddVersionModal: React.FC<AddVersionModalProps> = (props) => {
                 >
                     <Input placeholder="Paste link"/>
                 </Form.Item>
+                <Button type='primary'>
+                    Start learning
+                </Button>
             </Form>
-
-        </Modal>
+            <InfoBar page={'learnPage'}/>
+        </div>
     )
 }
 
-export default AddVersionModal
+export default LearnPage;

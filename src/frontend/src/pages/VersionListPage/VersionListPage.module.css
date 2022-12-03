@@ -1,0 +1,16 @@
+.container {
+    margin-bottom: 30px;
+}
+.backBtn {
+    font-size: 20px;
+    text-align: left;
+}
+.list {
+    margin-top: 30px;
+    margin-bottom: 50px;
+}
+.listHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center
+}

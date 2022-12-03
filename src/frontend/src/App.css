@@ -4,5 +4,11 @@
   height: 500px;
   margin: 100px auto;
   padding: 20px;
+  border: 1px solid darkslategrey;
+  border-radius: 10px ;
+  box-shadow: darkslategrey;
+}
+
+.app-page-content {
 }
 

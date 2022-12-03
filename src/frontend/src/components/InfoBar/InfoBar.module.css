@@ -1,0 +1,13 @@
+.container {
+    width: 400px;
+    height: 100px;
+    margin: 0 auto;
+    background-color: lightcyan;
+    border-radius: 15px;
+}
+
+.header {
+    text-align: left;
+    margin-left: 10px;
+    font-size: 20px;
+}

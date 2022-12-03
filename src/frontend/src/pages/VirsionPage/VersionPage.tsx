@@ -1,11 +1,11 @@
 import React from 'react'
 import {useParams} from "react-router-dom";
 
-interface VersionPageProps {
+interface VersionPagePropsType {
 
 }
 
-const VersionPage: React.FC<VersionPageProps> = () => {
+const VersionPage: React.FC<VersionPagePropsType> = () => {
     const {id} = useParams()
 
     return (

@@ -1,0 +1,11 @@
+.mainPageContainer {
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 25%;
+}
+
+.mainPageBtn {
+    width: 150px;
+    height: 150px;
+    font-size: 30px;
+}

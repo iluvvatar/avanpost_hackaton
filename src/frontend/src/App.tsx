@@ -1,11 +1,12 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import './App.css';
 import {Layout} from "antd";
-import VersionList from "./components/VersionList/VersionList";
-import {v1} from "uuid";
-import {Route, Routes} from "react-router-dom";
+import VersionListPage from "./pages/VersionListPage/VersionListPage";
+import {NavLink, Route, Routes} from "react-router-dom";
 import VersionPage from "./pages/VirsionPage/VersionPage";
-import axios from "axios";
+import MainPage from "./pages/MainPage/MainPage";
+import TestPage from "./pages/TestPage/TestPage";
+import LearnPage from "./pages/LearnPage/LearnPage";
 
 const {Footer, Content} = Layout;
 
@@ -13,6 +14,7 @@ export interface Version {
     id: string,
     title: string
 }
+
 export interface NewVersionFormValueTypes {
     title: string,
     link: string
@@ -20,42 +22,34 @@ export interface NewVersionFormValueTypes {
 
 function App() {
 
-    let [versionList, setVersionList] = useState<Version[]>([])
-
-    useEffect(() => {
-        axios.get('http://158.160.47.53:8080/api/v1/versions')
-            .then((data) => {
-                console.log(data)
-            })
-
-        setVersionList(createVersionList());
-    }, [])
-
-
-    const createVersionList = () => {
-        let versionListArr: Version[] = [];
-        for (let i = 1; i < 5; i++) {
-            versionListArr.push(
-                {id: v1(), title: `version ${i}`}
-            )
-        }
-        return versionListArr
-    }
 
     return (
         <Layout className='app-container'>
-            <Content>
+            <Content className='app-page-content'>
                 <Routes>
                     <Route path="/" element={
-                        <VersionList versionList={versionList}/>
+                        <MainPage/>
                     }/>
-                    <Route path="/version/:id" element={
+                    <Route path="/test" element={
+                        <TestPage/>
+                    }/>
+                    <Route path="/learn" element={
+                        <LearnPage/>
+                    }/>
+                    <Route path="/versionList" element={
+                        <VersionListPage/>
+                    }/>
+                    <Route path="/versionList/:id" element={
                         <VersionPage/>
                     }/>
                 </Routes>
+
             </Content>
-            <Footer style={{padding: '0px'}}>
-                <div>team: Panic! At the kernel for </div>
+            <Footer style={{height: '90px',padding: '0px'}}>
+                <NavLink to='/versionList' >
+                    version list
+                </NavLink>
+                <div style={{ marginTop: '30px',}}>team: Panic! At the kernel for </div>
                 <div>avanpost_hackaton(c)</div>
             </Footer>
         </Layout>
