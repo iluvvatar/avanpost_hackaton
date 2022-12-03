@@ -11,7 +11,8 @@ import time  # DEBUG
 from backend.subprocesses.events import update_progress, update_progress_done
 
 GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
-MOCKED_DATA_PATH = 'backend/data/mocked_image_search_response.json'
+MOCKED_DATA_PATH = os.path.join(os.getenv('STORAGE_PATH'),
+                                'mocked_image_search_response.json')
 
 
 def mocked(search):
@@ -36,6 +37,10 @@ def make_google_search(query, page=0):
 
 
 def get_images_from_google(path, class_name, num_doc=10, drawn_ratio=0.0):
+    path = os.path.join(path, class_name)
+    if not os.path.exists(path):
+        os.mkdir(path)
+
     page, downloaded = 0, 0
     for page in range(10):
         links = make_google_search(class_name, page)

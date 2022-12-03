@@ -3,6 +3,8 @@ from subprocess import Popen, PIPE
 
 from backend.subprocesses.events import ProgressCheckerThread
 
+STORAGE_PATH = os.getenv('STORAGE_PATH')
+ORIG_STORAGE_PATH = os.path.join(STORAGE_PATH, 'orig')
 
 Process = {
     'DOWNLOAD_IMAGE': None,
@@ -22,12 +24,11 @@ def run_subprocess(key, cmd, callback, blocking):
 
 
 def download_image(link, callback, blocking):
-    path = './data'
     cmd = [
         'python3',
         '-m', 'backend.subprocesses.image',
         '--command', 'get_image',
-        '--path', path,
+        '--path', STORAGE_PATH,
         '--link', link
     ]
     run_subprocess('DOWNLOAD_IMAGE', cmd, callback, blocking)
@@ -45,12 +46,11 @@ def predict_single(umid, callback, blocking):
 
 
 def download_dataset(link, callback, blocking):
-    path = './data'
     cmd = [
         'python3',
         '-m', 'backend.subprocesses.image',
         '--command', 'get_dataset',
-        '--path', path,
+        '--path', STORAGE_PATH,
         '--link', link
     ]
     run_subprocess('DOWNLOAD_DATASET', cmd, callback, blocking)
@@ -68,12 +68,11 @@ def predict(umid, dataset, callback, blocking):
 
 
 def download_dataset_for_new_class(class_name, callback, blocking):
-    path = './data'
     cmd = [
         'python3',
         '-m', 'backend.subprocesses.image',
         '--command', 'get_dataset_for_new_class',
-        '--path', path,
+        '--path', ORIG_STORAGE_PATH,
         '--class-name', class_name
     ]
     run_subprocess('DOWNLOAD_DATASET_FOR_NEW_CLASS', cmd, callback, blocking)

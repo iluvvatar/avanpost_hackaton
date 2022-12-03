@@ -1,7 +1,11 @@
+import os
 import json
 
 
 from backend.subprocesses.events import update_progress, update_progress_done
+
+STORAGE_PATH = os.getenv('STORAGE_PATH', '/storage/data')
+ORIG_STORAGE_PATH = os.path.join(STORAGE_PATH, 'orig')
 
 
 def predict_single(muid, filename):
