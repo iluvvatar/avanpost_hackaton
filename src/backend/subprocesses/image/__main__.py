@@ -1,21 +1,21 @@
 import click
-from .collect import get_images_from_google
-
-
-def generate_dataset(path: str,
-                     class_name: str,
-                     num_docs: int,
-                     drawn_ratio: float):
-    get_images_from_google(path, class_name, num_docs, drawn_ratio)
+from .collect import get_images_from_google, get_image, get_dataset
 
 
 @click.command()
+@click.option('--command', required=True)
 @click.option('--path', required=True)
-@click.option('--class-name', required=True)
+@click.option('--link', required=True)
+@click.option('--class-name')
 @click.option('--num-docs', default=10, type=int)
 @click.option('--drawn-ratio', default=0.0, type=float)
-def main(path, class_name, num_docs, drawn_ratio):
-    generate_dataset(path, class_name, num_docs, drawn_ratio)
+def main(command, path, link, class_name, num_docs, drawn_ratio):
+    if command == 'new_class' and class_name:
+        get_images_from_google(path, class_name, num_docs, drawn_ratio)
+    elif command == 'get_dataset' and link:
+        get_dataset(path, link)
+    elif command == 'get_image' and link:
+        get_image(path, link)
 
 
 if __name__ == '__main__':

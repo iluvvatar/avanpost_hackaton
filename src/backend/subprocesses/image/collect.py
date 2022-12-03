@@ -48,8 +48,25 @@ def get_images_from_google(path, class_name, num_doc=10, drawn_ratio=0.0):
                     downloaded += 1
                     update_progress(100.0 * downloaded / num_doc)
                     if downloaded >= num_doc:
-                        update_progress_done('...')
+                        update_progress_done(f'{num_doc}')
                         return
+
+    update_progress_done(f'{num_doc} > {downloaded}')
 
     # drawn_num_doc = int(drawn_ratio * num_doc)
     # TODO: make_google_search(f'drawn {class_name}')
+
+
+def get_image(path, link):
+    time.sleep(2)
+    response = requests.get(link, stream=True)
+    if response.status_code == 200:
+        filepath = os.path.join(path, str(uuid.uuid4()))
+        with open(filepath, 'wb') as f_out:
+            response.raw_decode_content = True
+            shutil.copyfileobj(response.raw, f_out)
+    update_progress_done(f'{filepath}')
+
+
+def get_dataset(path, link):
+    pass

@@ -8,6 +8,7 @@ class ProgressCheckerThread(threading.Thread):
         self.done = False
         self.progress = 0.0
         self.process = process
+        self.result = None
         super().__init__()
 
     def run(self):
@@ -16,11 +17,12 @@ class ProgressCheckerThread(threading.Thread):
             time.sleep(1)
             if line.startswith('PROGRESS'):
                 status = line.strip().replace('PROGRESS: ', '')
-                if status == 'DONE':
+                if status.startswith('DONE'):
                     self.done = True
                     self.progress = 100.0
-                else:
-                    self.progress = float(status)
+                    self.result = status.replace('DONE: ', '')
+                elif status.startswith('RUNNING'):
+                    self.progress = float(status.replace('RUNNING: ', ''))
 
 
 def update_progress_error(message: str):
@@ -28,8 +30,8 @@ def update_progress_error(message: str):
 
 
 def update_progress_done(message: str):
-    print('PROGRESS: DONE', flush=True)
+    print(f'PROGRESS: DONE: {message}', flush=True)
 
 
 def update_progress(value: float):
-    print(f'PROGRESS: {value}', flush=True)
+    print(f'PROGRESS: RUNNING: {value}', flush=True)

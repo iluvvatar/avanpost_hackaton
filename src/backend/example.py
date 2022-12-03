@@ -4,15 +4,28 @@ from subprocess import Popen, PIPE
 from subprocesses.events import ProgressCheckerThread
 
 CUSTOM_PYTHON_PATH = os.getenv('CUSTOM_PYTHON_PATH')
+RANDOM_IMAGE_FROM_INTERNET = os.getenv('RANDOM_IMAGE_FROM_INTERNET')
+
+# cmd = [
+#     'python3',
+#     '-m',
+#     'image',
+#     '--class-name',
+#     'snowboard',
+#     '--path',
+#     './data'
+# ]
 
 cmd = [
     'python3',
     '-m',
     'image',
-    '--class-name',
-    'snowboard',
+    '--command',
+    'get_image',
     '--path',
-    './data'
+    './data',
+    '--link',
+    RANDOM_IMAGE_FROM_INTERNET
 ]
 
 custom_env = os.environ.copy()
@@ -26,7 +39,7 @@ thread.start()
 while True:
     time.sleep(1)
     if thread.done:
-        print('DONE')
+        print(f'DONE: {thread.result}')
         break
     print(f'... {thread.progress}%')
 
