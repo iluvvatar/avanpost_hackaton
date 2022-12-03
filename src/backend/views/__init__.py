@@ -169,8 +169,21 @@ class TestModelView(web.View, CorsViewMixin):
             },
         },
     )
-    @requests.request_schema(requests.TestModelRequest)
+    # @requests.request_schema(requests.TestModelRequest)
     async def get(self) -> web.Response:
-        data = {"metrics": {"accuracy": 100, "f1": 1}}
+        umid = 'm666'
+        dataset_url = 'www.example.com'
+        def on_predicted():
+            global logger
+            logger.warn(Process['PREDICT'].result)
+
+        def on_downloaded():
+            global logger
+            logger.warn(Process['DOWNLOAD_DATASET'].result)
+            dataset = Process['DOWNLOAD_DATASET'].result['path']
+            predict(umid, dataset, callback=on_predicted, blocking=False)
+
+        download_dataset(dataset_url, callback=on_downloaded, blocking=False)
+        data = {'status': 'STARTED'}
         meta = {}
         return web.json_response(dict(data=data, meta=meta))

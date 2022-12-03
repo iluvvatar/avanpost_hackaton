@@ -74,4 +74,4 @@ def get_image(path, link):
 
 
 def get_dataset(path, link):
-    uupdate_progress_done(json.dumps({}))
+    update_progress_done(json.dumps({'path': '...'}))
