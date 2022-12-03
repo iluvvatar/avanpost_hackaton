@@ -6,7 +6,11 @@ from backend.subprocesses.events import ProgressCheckerThread
 
 Process = {
     'DOWNLOAD_IMAGE': None,
-    'PREDICT_SINGLE': None
+    'PREDICT_SINGLE': None,
+    'DOWNLOAD_DATASET': None,
+    'PREDICT': None,
+    'DOWNLOAD_DATASET_FOR_NEW_CLASS': None,
+    'RETRAIN': None
 }
 
 
@@ -38,3 +42,49 @@ def predict_single(umid, callback, blocking):
         '--umid', umid
     ]
     run_subprocess('PREDICT_SINGLE', cmd, callback, blocking)
+
+
+def download_dataset(link, callback, blocking):
+    path = './data'
+    cmd = [
+        'python3',
+        '-m', 'backend.subprocesses.image',
+        '--command', 'get_dataset',
+        '--path', path,
+        '--link', link
+    ]
+    run_subprocess('DOWNLOAD_DATASET', cmd, callback, blocking)
+
+
+def predict(umid, dataset, callback, blocking):
+    cmd = [
+        'python3',
+        '-m', 'backend.subprocesses.nn',
+        '--command', 'predict',
+        '--dataset', dataset,
+        '--umid', umid
+    ]
+    run_subprocess('PREDICT', cmd, callback, blocking)
+
+
+def download_dataset_for_new_class(class_name, callback, blocking):
+    path = './data'
+    cmd = [
+        'python3',
+        '-m', 'backend.subprocesses.image',
+        '--command', 'get_dataset_for_new_class',
+        '--path', path,
+        '--class-name', class_name
+    ]
+    run_subprocess('DOWNLOAD_DATASET_FOR_NEW_CLASS', cmd, callback, blocking)
+
+
+def retrain(umid, class_name, callback, blocking):
+    cmd = [
+        'python3',
+        '-m', 'backend.subprocesses.nn',
+        '--command', 'predict',
+        '--umid', umid,
+        '--class-name', class_name
+    ]
+    run_subprocess('RETRAIN', cmd, callback, blocking)

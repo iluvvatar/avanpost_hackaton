@@ -9,9 +9,9 @@ def predict_single(muid, filename):
             json.dumps({'label': 'snowboard', 'probability': 1.0}))
 
 
-def predict():
+def predict(umid, dataset):
     update_progress_done(json.dumps({'snowboard': {'precision': 0.9, 'recall': 0.6}}))
 
 
-def retrain():
+def retrain(umid, class_name):
     update_progress_done(json.dumps({'umid': 'm666'}))
