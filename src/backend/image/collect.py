@@ -5,7 +5,7 @@ from operator import itemgetter
 import requests
 import shutil
 import uuid
-from .message import update_progress, update_progress_done
+from events import update_progress, update_progress_done
 import time  # DEBUG
 
 GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')

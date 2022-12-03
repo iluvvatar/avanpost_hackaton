@@ -1,7 +1,6 @@
-from subprocess import Popen, PIPE
 import threading
-import time
 import io
+import time
 
 
 class ProgressCheckerThread(threading.Thread):
@@ -24,26 +23,13 @@ class ProgressCheckerThread(threading.Thread):
                     self.progress = float(status)
 
 
-cmd = [
-    'python3',
-    '-m',
-    'image',
-    '--class-name',
-    'snowboard',
-    '--path',
-    './data'
-]
+def update_progress_error(message: str):
+    pass
 
-p = Popen(cmd, stdout=PIPE)
 
-thread = ProgressCheckerThread(p)
-thread.start()
+def update_progress_done(message: str):
+    print('PROGRESS: DONE', flush=True)
 
-while True:
-    time.sleep(1)
-    if thread.done:
-        print('DONE')
-        break
-    print(f'... {thread.progress}%')
 
-thread.join()
+def update_progress(value: float):
+    print(f'PROGRESS: {value}', flush=True)
