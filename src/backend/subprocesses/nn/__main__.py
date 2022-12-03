@@ -1,4 +1,6 @@
 import click
+
+
 from .operations import predict, predict_single, retrain
 
 

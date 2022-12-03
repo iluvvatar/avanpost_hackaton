@@ -1,5 +1,7 @@
 import json
-from events import update_progress, update_progress_done
+
+
+from backend.subprocesses.events import update_progress, update_progress_done
 
 
 def predict_single(muid, filename):
