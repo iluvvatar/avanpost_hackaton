@@ -32,6 +32,7 @@ class Application(web.Application):
         self._setup_cors()
 
     def _configure_logging(self) -> None:
+        # TODO: is not working
         logging.basicConfig()
 
     def _setup_swagger(self) -> None:
@@ -61,4 +62,9 @@ class Application(web.Application):
             cors.add(route)
 
     def _setup_routes(self) -> None:
-        self.router.add_view(r"/api/hello", views.HellloView)
+        self.router.add_view(r"/api/v1/ping", views.PingView)
+        self.router.add_view(r"/api/v1/versions", views.VersionsView)
+        self.router.add_view(r"/api/v1/progress/learn", views.LearnProgressView)
+        self.router.add_view(r"/api/v1/progress/download", views.DownloadProgressView)
+        self.router.add_view(r"/api/v1/predict", views.PredictImageView)
+        self.router.add_view(r"/api/v1/test", views.TestModelView)

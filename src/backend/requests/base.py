@@ -1,83 +1,14 @@
-import abc
 import dataclasses
 import functools
 import typing as tp
-import enum
 import dataclasses
 
 import marshmallow as msh
-import marshmallow_dataclass
 from aiohttp import web
 from aiohttp_apispec import docs
 
 from backend.errors import RequestError
-
-
-class Enum(enum.Enum):
-    @classmethod
-    def values(cls) -> list[tp.Any]:
-        return [e.value for e in cls]
-
-
-T = tp.TypeVar("T", bound="DataClass")
-TJSONSerializable = tp.Union[
-    None,
-    bool,
-    int,
-    float,
-    str,
-    tp.List["TJSONSerializable"],
-    tp.Dict[str, "TJSONSerializable"]
-]
-
-
-def dataclass(_cls: tp.Type[T], *args, **kwargs) -> tp.Type[T]:
-    """ Wrapper of marshmallow_dataclass.dataclass for original class type hints. """
-    return marshmallow_dataclass.dataclass(_cls, *args, **kwargs)
-
-
-class DataClassMeta(abc.ABCMeta):
-    """ Loads protobuf message class and wraps in marshmallow_dataclass.dataclass on class defenition. """
-
-    def __new__(
-        metacls,
-        name: str,
-        bases: tp.Tuple[type],
-        attrs: dict,
-    ):
-        return dataclass(_cls=super().__new__(metacls, name, bases, attrs))
-
-
-class DataClass(metaclass=DataClassMeta):
-    Schema: tp.ClassVar[tp.Type[msh.Schema]] = msh.Schema
-
-    class Meta:
-        # options: https://marshmallow.readthedocs.io/en/stable/api_reference.html#marshmallow.Schema.Meta
-        unknown = msh.RAISE
-
-    def to_dict(self, validate=True) -> TJSONSerializable:
-        if validate:
-            return self.Schema().dump(self)
-        return dataclasses.asdict(self)
-
-    @classmethod
-    def load(cls: tp.Type[T], msg: dict, unknown: tp.Optional[str] = None) -> T:
-        return cls.Schema(unknown=(unknown or cls.Meta.unknown)).load(msg)
-
-
-THandler = tp.Callable[[web.View], tp.Awaitable[web.Response]]
-TJsonSerializeble = tp.Union[
-    None,
-    str,
-    int,
-    float,
-    bool,
-    dict[tp.Hashable, "TJsonSerializeble"],
-    list["TJsonSerializeble"]
-]
-RT = tp.TypeVar("RT")
-TDecorator = tp.Callable[[RT], RT]
-
+from backend.core import DataClass, Enum, TJsonSerializable, THandler, TDecorator
 
 
 class ERequestLocation(Enum):
@@ -89,6 +20,9 @@ class ERequestLocation(Enum):
 
 class RequestSchemaField(msh.fields.Field):
 
+    def FromMsh(self, msh_field: msh.fields.Field, **kwargs) -> dataclasses.field:
+        return self.__call__(metadata=dict(marshmallow_field=msh_field), **kwargs)
+
     def __call__(
         self,
         *args,
@@ -97,7 +31,7 @@ class RequestSchemaField(msh.fields.Field):
         required: bool = False,
         default: tp.Any = dataclasses.MISSING,
         default_factory: tp.Any = dataclasses.MISSING,
-        example: TJsonSerializeble | None = None,
+        example: TJsonSerializable | None = None,
         metadata: dict | None = None,
         name: str | None = None,
         **kwargs
@@ -155,7 +89,7 @@ class BaseRequest(DataClass):
         try:
             return cls.load(data)
         except msh.ValidationError as exc:
-            raise RequestError(message=str(exc)) from exc
+            raise RequestError(msg=str(exc.messages)) from exc
 
 
 class SwaggerType:

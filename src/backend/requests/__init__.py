@@ -1,9 +1,38 @@
+import marshmallow as msh
+
 from backend.requests.base import BaseRequest, request_field, Enum, ERequestLocation, request_schema
 
 
-class HelloRequest(BaseRequest):
-    message: str = request_field(
+class CreateVersionRequest(BaseRequest):
+    label: str = request_field(
         location=ERequestLocation.QUERY,
-        description="message",
-        default="123"
+        description="Class label",
+        required=True
+    )
+    data_url: str = request_field.FromMsh(
+        msh.fields.Url(),
+        location=ERequestLocation.QUERY,
+        description="Url to archive with images of new class",
+        required=True
+    )
+
+
+class PredictImageRequest(BaseRequest):
+    # TODO
+    # image: str = request_field(
+    #     location=ERequestLocation.QUERY,
+    #     description="Image BLOB",
+    #     required=True
+    # )
+    pass
+
+
+class TestModelRequest(BaseRequest):
+    data_url: str = request_field(
+        location=ERequestLocation.QUERY,
+        description=(
+            "Url to labeled dataset. "
+            "Url should link to archive containing images structured into folders with class label name."
+        ),
+        required=True
     )

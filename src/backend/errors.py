@@ -9,6 +9,6 @@ class ServiceError(Exception):
         return self.__class__.__name__
 
 
-class RequestError(Exception):
+class RequestError(ServiceError):
     def __init__(self, msg: str | None = None) -> None:
-        super().__init__(msg, 422)
+        super().__init__(msg, 420)
