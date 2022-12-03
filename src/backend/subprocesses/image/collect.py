@@ -41,16 +41,19 @@ def get_images_from_google(path, class_name, num_doc=10, drawn_ratio=0.0):
             time.sleep(2)
             response = requests.get(link, stream=True)
             if response.status_code == 200:
-                filepath = os.path.join(path, str(uuid.uuid4()))
-                with open(filepath, 'wb') as f_out:
+                filename = os.path.join(path, str(uuid.uuid4()))
+                with open(filename, 'wb') as f_out:
                     response.raw_decode_content = True
                     shutil.copyfileobj(response.raw, f_out)
                     downloaded += 1
                     update_progress(100.0 * downloaded / num_doc)
                     if downloaded >= num_doc:
-                        update_progress_done(f'{num_doc}')
+                        res = {'num_doc': num_doc, 'downloaded': downloaded}
+                        update_progress_done(json.dumps(res))
                         return
 
+    res = {'num_doc': num_doc, 'downloaded': downloaded}
+    update_progress_done(json.dumps(res))
     update_progress_done(f'{num_doc} > {downloaded}')
 
     # drawn_num_doc = int(drawn_ratio * num_doc)
@@ -61,11 +64,11 @@ def get_image(path, link):
     time.sleep(2)
     response = requests.get(link, stream=True)
     if response.status_code == 200:
-        filepath = os.path.join(path, str(uuid.uuid4()))
-        with open(filepath, 'wb') as f_out:
+        filename = os.path.join(path, str(uuid.uuid4()))
+        with open(filename, 'wb') as f_out:
             response.raw_decode_content = True
             shutil.copyfileobj(response.raw, f_out)
-    update_progress_done(f'{filepath}')
+    update_progress_done(json.dumps({'filename': filename}))
 
 
 def get_dataset(path, link):

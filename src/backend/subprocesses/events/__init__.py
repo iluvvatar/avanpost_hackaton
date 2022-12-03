@@ -1,15 +1,17 @@
+import json
 import threading
 import io
 import time
 
 
 class ProgressCheckerThread(threading.Thread):
-    def __init__(self, process):
+    def __init__(self, process, callback=None):
         self.done = False
         self.progress = 0.0
         self.process = process
         self.result = None
         super().__init__()
+        self.callback = callback
 
     def run(self):
         for line in io.TextIOWrapper(iter(self.process.stdout),
@@ -20,9 +22,13 @@ class ProgressCheckerThread(threading.Thread):
                 if status.startswith('DONE'):
                     self.done = True
                     self.progress = 100.0
-                    self.result = status.replace('DONE: ', '')
+                    self.result = json.loads(status.replace('DONE: ', ''))
+                    break
                 elif status.startswith('RUNNING'):
                     self.progress = float(status.replace('RUNNING: ', ''))
+
+        if self.callback:
+            self.callback()
 
 
 def update_progress_error(message: str):

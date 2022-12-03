@@ -1,3 +1,4 @@
+import os
 import logging
 
 from aiohttp import web
@@ -7,6 +8,7 @@ from aiohttp_cors import CorsViewMixin
 
 import backend.requests as requests
 import backend.responses as responses
+from backend.subprocesses import Process, download_image, predict_single
 
 logger = logging.getLogger(__name__)
 
@@ -115,7 +117,21 @@ class PredictImageView(web.View, CorsViewMixin):
     )
     @requests.request_schema(requests.PredictImageRequest)
     async def get(self) -> web.Response:
-        data = {"image_url": "http://localhost", "label": "cat", "probability": 100}
+        umid = 'umid'
+        image_url = os.getenv('RANDOM_IMAGE_FROM_INTERNET')
+        prediction = None
+
+        def on_downloaded():
+            predict_single(umid, callback=None, non_blocking=False)
+            nonlocal prediction
+            prediction = Process.PREDICT_SINGLE.result
+
+        download_image(image_url, on_downloaded, non_blocking=False)
+        data = {
+            "image_url": image_url,
+            "label": prediction["label"],
+            "probability": prediction["probability"]
+        }
         meta = {}
         return web.json_response(dict(data=data, meta=meta))
 
