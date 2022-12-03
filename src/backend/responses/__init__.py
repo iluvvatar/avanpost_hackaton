@@ -1,38 +1,47 @@
 import typing as tp
 
-from backend.core import DataClass
+from backend.core import DataClass, Enum
 
 
-class VersionsListResponse(DataClass):
+class EProgressStatus(Enum):
+    RUNNING = "running"
+    COMPLETED = "completed"
+
+
+class EmptyDataResponse(DataClass):
+    data: dict[str, tp.Any]
+
+
+class EmptyMetaResponse(DataClass):
+    meta: dict[str, tp.Any]
+
+
+class VersionsListResponse(EmptyMetaResponse):
     data: list[str]
-    meta: dict[str, tp.Any]
 
 
-class LearnProgressResponse(DataClass):
-    data: int
-    meta: dict[str, tp.Any]
+class PredictImageResponse(EmptyMetaResponse):
 
-
-class DownloadProgressResponse(DataClass):
-    data: int
-    meta: dict[str, tp.Any]
-
-
-class PredictImageResponse(DataClass):
-
-    class LearnProgressData(DataClass):
+    class PredictImageData(DataClass):
         image_url: str
         label: str
         probability: float
 
-    data: LearnProgressData
-    meta: dict[str, tp.Any]
+    data: PredictImageData
 
 
-class TestModelResponse(DataClass):
+class ProgressResponse(EmptyDataResponse):
 
-    class TestModelData(DataClass):
+    class ProgressMeta(DataClass):
+        status: EProgressStatus
+        percentile: int
+    
+    meta: ProgressMeta
+
+
+class TestModelProgressResponse(ProgressResponse):
+
+    class TestModelProgressData(DataClass):
         metrics: dict[str, float]
 
-    data: TestModelData
-    meta: dict[str, tp.Any]
+    data: TestModelProgressData
