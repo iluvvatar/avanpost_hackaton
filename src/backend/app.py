@@ -1,5 +1,64 @@
+import logging
+import logging.config
+from datetime import datetime
+
+import aiohttp_cors
 from aiohttp import web
+from aiohttp.web_middlewares import normalize_path_middleware
+from aiohttp_apispec import validation_middleware
+
+from backend.middlewares import exceptions_handler_middleware
+from backend.swagger import setup_aiohttp_apispec
+import backend.views as views
+
+
+logger = logging.getLogger(__name__)
 
 
 class Application(web.Application):
-    pass
+    def __init__(self) -> None:
+        self._configure_logging()
+
+        super().__init__(middlewares=[
+            normalize_path_middleware(),
+            exceptions_handler_middleware,
+            validation_middleware
+        ])
+
+        self.create_time = datetime.now().strftime(r"%Y-%m-%dT%H:%M:%SZ")
+        self._configure_logging()
+        self._setup_routes()
+        self._setup_swagger()
+        self._setup_cors()
+
+    def _configure_logging(self) -> None:
+        logging.basicConfig()
+
+    def _setup_swagger(self) -> None:
+        logger.debug("Setup swagger")
+        setup_aiohttp_apispec(
+            app=self,
+            title="Panic! At the kernel!",
+            version="0.0.1",
+            url="/api/docs/swagger.json",
+            static_path="/swagger",
+            swagger_path="/api/docs",
+        )
+
+    def _setup_cors(self) -> None:
+        logger.debug("Setup CORS")
+        cors = aiohttp_cors.setup(
+            self, defaults={
+                "*": aiohttp_cors.ResourceOptions(
+                    allow_credentials=True,
+                    expose_headers="*",
+                    allow_headers="*",
+                    allow_methods=["POST", "PUT"],
+                ),
+            },
+        )
+        for route in list(self.router.routes()):
+            cors.add(route)
+
+    def _setup_routes(self) -> None:
+        self.router.add_view(r"/api/hello", views.HellloView)
