@@ -83,7 +83,7 @@ def retrain(umid, class_name, callback, blocking):
     cmd = [
         'python3',
         '-m', 'backend.subprocesses.nn',
-        '--command', 'predict',
+        '--command', 'retrain',
         '--umid', umid,
         '--class-name', class_name
     ]

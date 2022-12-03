@@ -8,9 +8,18 @@ from aiohttp_cors import CorsViewMixin
 
 import backend.requests as requests
 import backend.responses as responses
-from backend.subprocesses import Process, download_image, predict_single
+from backend.subprocesses import (
+    Process,
+    download_image,
+    predict_single,
+    download_dataset,
+    predict,
+    download_dataset_for_new_class,
+    retrain
+)
 
 logger = logging.getLogger(__name__)
+versions = ['orig']
 
 
 class PingView(web.View, CorsViewMixin):
@@ -41,9 +50,8 @@ class VersionsView(web.View, CorsViewMixin):
         },
     )
     async def get(self) -> web.Response:
-        data = ["version1", "version2"]
         meta = {}
-        return web.json_response(dict(data=data, meta=meta))
+        return web.json_response(dict(data=versions, meta=meta))
 
     @docs(
         summary="Создать новую версию модели (дообучить распознавать новый класс)",
@@ -56,10 +64,22 @@ class VersionsView(web.View, CorsViewMixin):
             },
         },
     )
-    @requests.request_schema(requests.CreateVersionRequest)
+    # @requests.request_schema(requests.CreateVersionRequest)
     async def post(self) -> web.Response:
-        request_data: requests.CreateVersionRequest = self.request.data
-        data = ["version1", "version2"]
+        # request_data: requests.CreateVersionRequest = self.request.data
+        umid = 'umid'
+        class_name = 'snowboard'
+
+        def on_trained():
+            global versions
+            versions.append(Process['RETRAIN'].result['umid'])
+
+        def on_downloaded():
+            retrain(umid, class_name, callback=on_trained, blocking=False)
+
+        download_dataset_for_new_class(
+                class_name, callback=on_downloaded, blocking=False)
+        data = {'status': 'STARTED'}
         meta = {}
         return web.json_response(dict(data=data, meta=meta))
 

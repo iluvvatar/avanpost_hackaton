@@ -11,7 +11,7 @@ import time  # DEBUG
 from backend.subprocesses.events import update_progress, update_progress_done
 
 GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
-MOCKED_DATA_PATH = 'data/mocked_image_search_response.json'
+MOCKED_DATA_PATH = 'backend/data/mocked_image_search_response.json'
 
 
 def mocked(search):
