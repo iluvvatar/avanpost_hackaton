@@ -9,12 +9,6 @@ class NewVersionRequest(BaseRequest):
         description="Class label",
         required=True
     )
-    data_url: str = request_field.FromMsh(
-        msh.fields.Url(),
-        location=ERequestLocation.QUERY,
-        description="Url to archive with images of new class",
-        required=True
-    )
 
 
 class PredictImageRequest(BaseRequest):
