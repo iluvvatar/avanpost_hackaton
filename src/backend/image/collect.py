@@ -5,6 +5,8 @@ from operator import itemgetter
 import requests
 import shutil
 import uuid
+from .message import update_progress, update_progress_done
+import time  # DEBUG
 
 GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
 MOCKED_DATA_PATH = 'mocked_image_search_response.json'
@@ -36,6 +38,7 @@ def get_images_from_google(path, class_name, num_doc=10, drawn_ratio=0.0):
     for page in range(10):
         links = make_google_search(class_name, page)
         for link in links:
+            time.sleep(2)
             response = requests.get(link, stream=True)
             if response.status_code == 200:
                 filepath = os.path.join(path, str(uuid.uuid4()))
@@ -43,7 +46,9 @@ def get_images_from_google(path, class_name, num_doc=10, drawn_ratio=0.0):
                     response.raw_decode_content = True
                     shutil.copyfileobj(response.raw, f_out)
                     downloaded += 1
+                    update_progress(100.0 * downloaded / num_doc)
                     if downloaded >= num_doc:
+                        update_progress_done('...')
                         return
 
     # drawn_num_doc = int(drawn_ratio * num_doc)
