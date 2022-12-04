@@ -1,0 +1,5 @@
+json==2.0.9
+torch==1.12.1+cu113
+torchvision==0.13.1+cu113
+skimage==0.18.3
+sklearn==1.0.2
