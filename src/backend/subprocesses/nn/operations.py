@@ -7,6 +7,13 @@ from backend.subprocesses.events import update_progress, update_progress_done
 STORAGE_PATH = os.getenv('STORAGE_PATH', '/storage/data')
 ORIG_STORAGE_PATH = os.path.join(STORAGE_PATH, 'orig')
 
+MAX_EPOCHS = 150
+USE_GPU = True
+ESR = 5
+batch_size = 64
+data_directory = '/storage/data/orig'
+here_live_model_versions = '/storage/data/models'
+model_classes_loc = '/storage/data/models/temathic'
 
 def predict_single(muid, filename):
     update_progress_done(
