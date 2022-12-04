@@ -22,7 +22,7 @@ def predict_single(muid, filename):
             json.dumps({'label': 'snowboard', 'probability': 1.0}))
 
 
-def predict(umid, dataset):
+def predict_random(umid, dataset):
     labels = [
         'minibus',
         'pickup',
@@ -45,7 +45,7 @@ def predict(umid, dataset):
     update_progress_done(json.dumps(results))
 
 
-def predict_m(umid, dataset):
+def predict(umid, dataset):
     old_model = f'{here_live_model_versions}/{choose_last_version(here_live_model_versions)}/model'
     test_set = get_predict_dataloader(dataset, our_transform_pipeleine)
     modelka = torch.load(old_model)
