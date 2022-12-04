@@ -40,8 +40,4 @@ class ProgressResponse(EmptyDataResponse):
 
 
 class TestModelProgressResponse(ProgressResponse):
-
-    class TestModelProgressData(DataClass):
-        metrics: dict[str, float]
-
-    data: TestModelProgressData
+    data: dict[str, list[str]]
