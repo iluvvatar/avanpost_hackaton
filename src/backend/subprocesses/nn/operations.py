@@ -22,7 +22,7 @@ def predict_single(muid, filename):
 
 def predict(umid, dataset):
     old_model = f'{here_live_model_versions}/{choose_last_version(here_live_model_versions)}/model'
-    test_set = get_predict_dataloader('/home/egorml/test_ds', our_transform_pipeleine)
+    test_set = get_predict_dataloader(dataset, our_transform_pipeleine)
     modelka = torch.load(old_model)
     predict_generator = modelka.predict(test_set)
     for i in  predict_generator:
