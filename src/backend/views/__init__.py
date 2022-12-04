@@ -14,7 +14,9 @@ from backend.subprocesses import (
     download_dataset,
     predict,
     download_dataset_for_new_class,
-    retrain
+    retrain,
+    get_meta,
+    get_data
 )
 
 logger = logging.getLogger(__name__)
@@ -161,9 +163,7 @@ class LearnProgressView(web.View, CorsViewMixin):
         },
     )
     async def get(self) -> web.Response:
-        data = {}
-        meta = {"status": responses.EProgressStatus.RUNNING.value, "percentile": 50}
-        return web.json_response(dict(data=data, meta=meta))
+        return web.json_response(dict(data=get_data('RETRAIN'), meta=get_meta('RETRAIN')))
 
 
 class DownloadProgressView(web.View, CorsViewMixin):
@@ -177,9 +177,7 @@ class DownloadProgressView(web.View, CorsViewMixin):
         },
     )
     async def get(self) -> web.Response:
-        data = {}
-        meta = {"status": responses.EProgressStatus.RUNNING.value, "percentile": 50}
-        return web.json_response(dict(data=data, meta=meta))
+        return web.json_response(dict(data=get_data('DOWNLOAD_DATASET'), meta=get_meta('DOWNLOAD_DATASET')))
 
 
 class TestModelProgressView(web.View, CorsViewMixin):
@@ -193,6 +191,4 @@ class TestModelProgressView(web.View, CorsViewMixin):
         },
     )
     async def get(self) -> web.Response:
-        data = {"metrics": {"accuracy": 100, "f1": 1}}
-        meta = {"status": responses.EProgressStatus.COMPLETED.value, "percentile": 100}
-        return web.json_response(dict(data=data, meta=meta))
+        return web.json_response(dict(data=get_data('PREDICT'), meta=get_meta('PREDICT')))

@@ -79,4 +79,8 @@ def get_image(path, link):
 
 
 def get_dataset(path, link):
+    for i in range(100):
+        time.sleep(2)
+        update_progress(i)
+
     update_progress_done(json.dumps({'path': '...'}))

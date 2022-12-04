@@ -87,3 +87,23 @@ def retrain(umid, class_name, callback, blocking):
         '--class-name', class_name
     ]
     run_subprocess('RETRAIN', cmd, callback, blocking)
+
+
+def get_meta(key):
+    if Process[key] is None:
+        return {'status': 'NOT_STARTED', 'percentile': 0.0}
+
+    if Process[key].done:
+        return {'status': 'COMPLETED', 'percentile': 100.0}
+
+    return {'status': 'RUNNING', 'percentile': Process[key].progress}
+
+
+def get_data(key):
+    if Process[key] is None:
+        return {'message': 'bad request'}
+
+    if not Process[key].done or Process[key].result is None:
+        return {}
+
+    return Process[key].result
