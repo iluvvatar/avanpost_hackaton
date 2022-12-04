@@ -157,7 +157,7 @@ class TransportPrediction(torch.nn.Module):
         self.layer4 = model.layer4
         self.avgpool = model.avgpool
         self.fc = torch.nn.Sequential(
-            torch.nn.Linear(in_features=2048, out_features=2048, bias=True),
+            torch.nn.Linear(in_features=2048, out_features=2, bias=True),
             torch.nn.Sigmoid())
     def forward(self, y):
         y = self.conv1(y)
@@ -218,7 +218,7 @@ class TransportPrediction(torch.nn.Module):
                             loss_sum += loss.item() * X.shape[0]
                             samples += X.shape[0]
                         else:
-                            ans_classes = (y > 0.5).type(torch.float32)
+                            ans_classes = (y[:, 1] > 0.5).type(torch.float32)
                             num_corrects = int((ans_classes == labels).sum()) 
                             correct_sum += num_corrects
             epoch_acc, epoch_loss = 0, 0
