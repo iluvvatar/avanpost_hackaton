@@ -140,6 +140,7 @@ class TransportPredictionscrambled(torch.nn.Module):
             paths = batch['path']
             if USE_GPU:
                 X = X.cuda()
+            with torch.set_grad_enabled(False): 
                 y = self(X)
             paths_all += paths
             for pred, path in zip (y, paths):
