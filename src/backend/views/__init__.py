@@ -70,8 +70,8 @@ class NewVersionView(web.View, CorsViewMixin):
     @requests.request_schema(requests.NewVersionRequest)
     async def post(self) -> web.Response:
         request_data: requests.NewVersionRequest = self.request.data
-        umid = 'umid'
-        class_name = 'snowboard'
+        umid = request_data.model_version
+        class_name = request_data.label
 
         def on_trained():
             global versions
@@ -102,8 +102,8 @@ class PredictImageView(web.View, CorsViewMixin):
     @requests.request_schema(requests.PredictImageRequest)
     async def get(self) -> web.Response:
         request_data: requests.PredictImageRequest = self.request.data
-        umid = 'umid'
-        image_url = os.getenv('RANDOM_IMAGE_FROM_INTERNET')
+        umid = request_data.model_version
+        image_url = request_data.image_url
         prediction = None
 
         def on_downloaded():
@@ -136,8 +136,9 @@ class TestModelView(web.View, CorsViewMixin):
     @requests.request_schema(requests.TestModelRequest)
     async def post(self) -> web.Response:
         request_data: requests.TestModelRequest = self.request.data
-        umid = 'm666'
-        dataset_url = 'www.example.com'
+        umid = request_data.model_version
+        dataset_url = request_data.data_url
+
         def on_predicted():
             global logger
             logger.warn(Process['PREDICT'].result)

@@ -4,6 +4,11 @@ from backend.requests.base import BaseRequest, request_field, Enum, ERequestLoca
 
 
 class NewVersionRequest(BaseRequest):
+    model_version: str = request_field(
+        location=ERequestLocation.QUERY,
+        description="Model version to use for evaluation",
+        required=True
+    )
     label: str = request_field(
         location=ERequestLocation.QUERY,
         description="Class label",
