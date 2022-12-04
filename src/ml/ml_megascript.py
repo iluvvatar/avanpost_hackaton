@@ -339,10 +339,11 @@ def scramble(interesting_zone = None, model = None, model_classes = None):
 
     if interesting_zone:
         for i in interesting_zone:
-            classes[i] = max_class + 1
-            int_modelka = torch.load(f'{model_classes_loc}/{i}.model')
-            fcs.append(int_modelka.fc)
-            max_class += 1
+            if i not in classes.keys():
+                classes[i] = max_class + 1
+                int_modelka = torch.load(f'{model_classes_loc}/{i}.model')
+                fcs.append(int_modelka.fc)
+                max_class += 1
     return fcs, classes
 
 
@@ -410,20 +411,20 @@ class TransportPredictionscrambled(torch.nn.Module):
 #old_model = f'{here_live_model_versions}/{choose_last_version(here_live_model_versions)}/model'
 #old_classes = f'{here_live_model_versions}/{choose_last_version(here_live_model_versions)}/class_labels.json'
 
-new_wersion = int(choose_last_version(here_live_model_versions)[2:]) + 1
-new_mod = f'{here_live_model_versions}/id{new_wersion}/model'
-new_cls = f'{here_live_model_versions}/id{new_wersion}/class_labels.json'
-p = subprocess.Popen(f'mkdir {here_live_model_versions}/id{new_wersion}', shell = True, stderr=subprocess.PIPE, stdin = subprocess.PIPE)
-out, err = p.communicate()
+#new_wersion = int(choose_last_version(here_live_model_versions)[2:]) + 1
+#new_mod = f'{here_live_model_versions}/id{new_wersion}/model'
+#new_cls = f'{here_live_model_versions}/id{new_wersion}/class_labels.json'
+#p = subprocess.Popen(f'mkdir {here_live_model_versions}/id{new_wersion}', shell = True, stderr=subprocess.PIPE, stdin = subprocess.PIPE)
+#out, err = p.communicate()
 
-modelka = TransportPredictionscrambled(interesting_zona = interesting_zone, model_int = old_model, model_classes = old_classes)
-modelka.save_model(new_mod, json_path = new_cls)
+#modelka = TransportPredictionscrambled(interesting_zona = interesting_zone, model_int = old_model, model_classes = old_classes)
+#modelka.save_model(new_mod, json_path = new_cls)
 
 
-old_model = f'{here_live_model_versions}/{choose_last_version(here_live_model_versions)}/model'
-test_set = get_predict_dataloader('/home/egorml/test_ds', our_transform_pipeleine)
-modelka = torch.load(old_model)
-q = modelka.predict(test_set)
-print(q)
-for i in q: 
-    print(i)
+#old_model = f'{here_live_model_versions}/{choose_last_version(here_live_model_versions)}/model'
+#test_set = get_predict_dataloader('/home/egorml/test_ds', our_transform_pipeleine)
+#modelka = torch.load(old_model)
+#q = modelka.predict(test_set)
+#print(q)
+#for i in q: 
+ #   print(i)

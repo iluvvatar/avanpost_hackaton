@@ -170,7 +170,7 @@ class TransportPrediction(torch.nn.Module):
         y = self.layer4(y)
         y = self.avgpool(y)
         y = torch.flatten(y, 1)
-        y = torch.column_stack([layer(y) for layer in self.fc])
+        y = self.fc(y)
         return y
     
     def save_model(self, path):
