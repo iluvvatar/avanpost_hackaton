@@ -7,7 +7,15 @@
 }
 
 .header {
+    align-self: start;
     text-align: left;
     margin-left: 10px;
     font-size: 20px;
+}
+.statusBar {
+    justify-self: end;
+}
+.infoContent {
+    display: flex;
+    justify-content: center;
 }

@@ -1,26 +1,43 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import './App.css';
 import {Layout} from "antd";
 import VersionListPage from "./pages/VersionListPage/VersionListPage";
 import {NavLink, Route, Routes} from "react-router-dom";
-import VersionPage from "./pages/VirsionPage/VersionPage";
 import MainPage from "./pages/MainPage/MainPage";
 import TestPage from "./pages/TestPage/TestPage";
 import LearnPage from "./pages/LearnPage/LearnPage";
+import axios from 'axios';
 
 const {Footer, Content} = Layout;
 
+
+export interface SelectOptionType {
+    value: string
+    label: string
+}
 export interface Version {
     id: string,
     title: string
 }
-
 export interface NewVersionFormValueTypes {
-    title: string,
-    link: string
+    label: string,
+    dataUrl: string
 }
 
 function App() {
+
+    let [versionList, setVersionList] = useState<string[]>([])
+
+    useEffect(() => {
+        axios.get('http://158.160.47.53:8080/api/v1/versions/list')
+            .then(response => {
+                setVersionList(response.data.data)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }, [])
+
 
 
     return (
@@ -31,17 +48,17 @@ function App() {
                         <MainPage/>
                     }/>
                     <Route path="/test" element={
-                        <TestPage/>
+                        <TestPage versionList={versionList}/>
                     }/>
                     <Route path="/learn" element={
                         <LearnPage/>
                     }/>
                     <Route path="/versionList" element={
-                        <VersionListPage/>
+                        <VersionListPage versionList={versionList}/>
                     }/>
-                    <Route path="/versionList/:id" element={
-                        <VersionPage/>
-                    }/>
+                    {/*<Route path="/versionList/:id" element={*/}
+                    {/*    <VersionPage versionList={versionList}/>*/}
+                    {/*}/>*/}
                 </Routes>
 
             </Content>

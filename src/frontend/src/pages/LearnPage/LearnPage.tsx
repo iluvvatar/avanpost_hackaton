@@ -5,6 +5,7 @@ import InfoBar from "../../components/InfoBar/InfoBar";
 import classes from './LearnPage.module.css'
 import {ArrowLeftOutlined} from "@ant-design/icons";
 import {NavLink} from "react-router-dom";
+import axios from "axios";
 
 interface LearnPagePropsType {
 
@@ -23,11 +24,23 @@ const LearnPage: React.FC<LearnPagePropsType> = (props) => {
         form.validateFields()
             .then((values: NewVersionFormValueTypes) => {
                 console.log(values)
+                createVersion(values);
                 form.resetFields();
             })
             .catch((info) => {
                 console.log('Validate Failed:', info);
             });
+    }
+
+    const createVersion = (values: NewVersionFormValueTypes) => {
+        console.log('createVersion', values)
+        axios.post(`http://158.160.47.53:8080/api/v1/versions/new?label=${values.label}&data_url=${values.dataUrl}`)
+            .then(response => {
+                console.log(response)
+            })
+            .catch(reject => {
+                console.log(reject)
+            })
     }
 
     return (
@@ -45,18 +58,20 @@ const LearnPage: React.FC<LearnPagePropsType> = (props) => {
                   className={classes.form}
             >
                 <Form.Item label="Title"
-                           name="title"
+                           name="label"
                            rules={[{required: true, message: 'Please input title'}]}
                 >
                     <Input placeholder='New version title'/>
                 </Form.Item>
                 <Form.Item label="Link"
-                           name="link"
+                           name="dara_url"
                            rules={[{required: true, message: 'Please paste link to images'}]}
                 >
                     <Input placeholder="Paste link"/>
                 </Form.Item>
-                <Button type='primary'>
+                <Button type='primary'
+                        onClick={onSubmitHandler}
+                >
                     Start learning
                 </Button>
             </Form>
