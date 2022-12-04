@@ -1,5 +1,6 @@
 import os
 import json
+import random
 
 
 from backend.subprocesses.events import update_progress, update_progress_done
@@ -14,7 +15,26 @@ def predict_single(muid, filename):
 
 
 def predict(umid, dataset):
-    update_progress_done(json.dumps({'snowboard': {'precision': 0.9, 'recall': 0.6}}))
+    labels = [
+        'minibus',
+        'pickup',
+        'ski',
+        'tracktor',
+        'truck',
+        'horse',
+        'mower',
+        'showboard',
+        'train',
+        'unknown',
+        'skateboard'
+    ]
+
+    results = []
+    for filename in os.listdir(dataset):
+        results.append({'id': filename, 'label': random.choice(labels)})
+
+
+    update_progress_done(json.dumps(results))
 
 
 def retrain(umid, class_name):
