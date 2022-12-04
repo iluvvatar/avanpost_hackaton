@@ -138,6 +138,7 @@ class TestModelView(web.View, CorsViewMixin):
         request_data: requests.TestModelRequest = self.request.data
         umid = request_data.model_version
         dataset_url = request_data.data_url
+        logger.warn(dataset_url)
 
         def on_predicted():
             global logger
