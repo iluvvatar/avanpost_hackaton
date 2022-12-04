@@ -4,6 +4,8 @@ import json
 from ml.ml_megascript import *
 from backend.subprocesses.events import update_progress, update_progress_done
 
+a = TransportPredictionscrambled
+
 STORAGE_PATH = os.getenv('STORAGE_PATH', '/storage/data')
 ORIG_STORAGE_PATH = os.path.join(STORAGE_PATH, 'orig')
 
@@ -23,6 +25,7 @@ def predict_single(muid, filename):
 def predict(umid, dataset):
     old_model = f'{here_live_model_versions}/{choose_last_version(here_live_model_versions)}/model'
     test_set = get_predict_dataloader(dataset, our_transform_pipeleine)
+    modelka = TransportPredictionscrambled()
     modelka = torch.load(old_model)
     predict_generator = modelka.predict(test_set)
     for i in  predict_generator:
