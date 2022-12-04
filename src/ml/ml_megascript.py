@@ -312,7 +312,7 @@ def get_predict_dataloader(folder, our_transform_pipeleine):
 def scramble(interesting_zone = None, model = None, model_classes = None):
     fcs = []
     max_class = -1
-
+    classes = {}    
     if model_classes:
         with open(model_classes, 'r') as file:
             try:
