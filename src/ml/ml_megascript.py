@@ -249,7 +249,6 @@ class TransportPrediction(torch.nn.Module):
                     return {'accuracy': accs,
                     'loss': losses,
                     'best_accuracy': best_acc,
-                    'best_model_wts': best_model_wts,
                     'early_stopping': True,
                     'epochs': epo}
             if phase == "val" and epoch_acc > local_best_acc:
