@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {Button, Form, Input} from "antd";
 import {NewVersionFormValueTypes} from "../../App";
 import InfoBar from "../../components/InfoBar/InfoBar";
@@ -12,34 +12,35 @@ interface LearnPagePropsType {
 }
 
 const LearnPage: React.FC<LearnPagePropsType> = (props) => {
+    const [responseData, setResponseData] = useState<string>()
+    const [isLoading, setIsLoading] = useState<boolean>()
+    const [errorMessage, setErrorMessage] = useState<string>()
     const [form] = Form.useForm();
 
     const onFinish = (values: any) => {
         console.log('Success:', values);
+        createVersion(values)
     };
+
     const onFinishFailed = (errorInfo: any) => {
         console.log('Failed:', errorInfo);
     };
-    const onSubmitHandler = () => {
-        form.validateFields()
-            .then((values: NewVersionFormValueTypes) => {
-                console.log(values)
-                createVersion(values);
-                form.resetFields();
-            })
-            .catch((info) => {
-                console.log('Validate Failed:', info);
-            });
-    }
+
 
     const createVersion = (values: NewVersionFormValueTypes) => {
+        setIsLoading(true)
         console.log('createVersion', values)
-        axios.post(`http://158.160.47.53:8080/api/v1/versions/new?label=${values.label}&data_url=${values.dataUrl}`)
+        axios.post(`http://158.160.47.53:8081/api/v1/versions/new?label=${values.label}&data_url=${values.dataUrl}`)
             .then(response => {
+                setResponseData(response.data)
                 console.log(response)
             })
             .catch(reject => {
+                setErrorMessage(JSON.stringify(reject.response.data.message))
                 console.log(reject)
+            })
+            .finally(() => {
+                setIsLoading(false)
             })
     }
 
@@ -64,18 +65,22 @@ const LearnPage: React.FC<LearnPagePropsType> = (props) => {
                     <Input placeholder='New version title'/>
                 </Form.Item>
                 <Form.Item label="Link"
-                           name="dara_url"
+                           name="dataUrl"
                            rules={[{required: true, message: 'Please paste link to images'}]}
                 >
                     <Input placeholder="Paste link"/>
                 </Form.Item>
                 <Button type='primary'
-                        onClick={onSubmitHandler}
+                        htmlType='submit'
                 >
                     Start learning
                 </Button>
             </Form>
-            <InfoBar page={'learnPage'}/>
+            <InfoBar page={'learnPage'}
+                     isLoading={isLoading}
+                     responseData={responseData}
+                     errorMessage={errorMessage}
+            />
         </div>
     )
 }

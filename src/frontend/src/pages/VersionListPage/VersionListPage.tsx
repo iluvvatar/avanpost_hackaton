@@ -1,6 +1,6 @@
 import React from "react";
 import {NavLink} from "react-router-dom";
-import {List, Typography} from "antd";
+import {List, Pagination, Typography} from "antd";
 import classes from './VersionListPage.module.css'
 import {ArrowLeftOutlined} from "@ant-design/icons";
 
@@ -9,6 +9,7 @@ interface VersionListPropsType {
 }
 
 const VersionListPage: React.FC<VersionListPropsType> = (props) => {
+
 
     return (
         <div className={classes.container}>
@@ -24,7 +25,7 @@ const VersionListPage: React.FC<VersionListPropsType> = (props) => {
                         <h2>VersionList</h2>
                     </div>
                 }
-                dataSource={props.versionList}
+                dataSource={props.versionList.slice(0,4)}
                 renderItem={(version) => (
                     <List.Item>
                         <Typography>{version}</Typography>

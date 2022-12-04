@@ -6,6 +6,7 @@ interface InfoBarPropsType {
     page: string
     responseData?: string
     isLoading?: boolean
+    errorMessage?: string
 }
 
 const InfoBar: React.FC<InfoBarPropsType> = (props) => {
@@ -15,9 +16,11 @@ const InfoBar: React.FC<InfoBarPropsType> = (props) => {
             <div className={classes.infoContent}>
                 {props.isLoading
                     ? <Typography>Loading...</Typography>
-                    : <>
-                        <Typography>{props.responseData}</Typography>
-                    </>
+                    : props.errorMessage
+                        ? <Typography>{props.errorMessage}</Typography>
+                        : <>
+                            <Typography>{props.responseData}</Typography>
+                        </>
                 }
             </div>
 

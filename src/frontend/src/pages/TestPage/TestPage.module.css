@@ -4,12 +4,9 @@
     margin-bottom: 30px;
 }
 .input {
-    margin-top: 50px;
     margin-bottom: 20px;
 }
 .btn {
-    margin-bottom: 30px;
-    margin-top: 20px;
     justify-self: center;
     align-self: center;
     max-width: 90px;
@@ -17,4 +14,8 @@
 .backBtn {
     font-size: 20px;
     text-align: left;
+}
+.form {
+    margin-top: 50px;
+    margin-bottom: 30px;
 }

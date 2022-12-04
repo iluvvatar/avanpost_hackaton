@@ -29,7 +29,7 @@ function App() {
     let [versionList, setVersionList] = useState<string[]>([])
 
     useEffect(() => {
-        axios.get('http://158.160.47.53:8080/api/v1/versions/list')
+        axios.get('http://158.160.47.53:8081/api/v1/versions/list')
             .then(response => {
                 setVersionList(response.data.data)
             })

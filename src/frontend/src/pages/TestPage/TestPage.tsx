@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Button, Input, Select} from "antd";
+import {Button, Form, Input, Select} from "antd";
 import classes from './TestPage.module.css'
 import InfoBar from "../../components/InfoBar/InfoBar";
 import {ArrowLeftOutlined} from "@ant-design/icons";
@@ -12,32 +12,34 @@ interface TestPagePropsType {
 }
 
 const TestPage: React.FC<TestPagePropsType> = (props) => {
-    const [urlValue, setUrlValue] = useState<string>('')
     const [modelSelectOptions, setModelSelectOptions] = useState<SelectOptionType[]>()
-    const [currentModel, setCurrentModel] = useState<string>()
     const [responseData, setResponseData] = useState<string>()
     const [isLoading, setIsLoading] = useState<boolean>()
+    const [errorMessage, setErrorMessage] = useState<string>()
+    const [form] = Form.useForm();
 
 
     useEffect(() => {
         computeModelSelectOptions();
     }, [])
 
-     const startProgressCheck = () => {
+    const startProgressCheck = () => {
         setIsLoading(true)
-         setInterval(() => {
-             axios.get('http://158.160.47.53:8080/api/v1/progress/test')
-                 .then(resolve => {
-                     setResponseData(JSON.stringify(resolve.data.data))
-                 })
-                 .catch(reject => {
-                     console.log(reject)
-                 })
-                 .finally(() => {
-                     setIsLoading(false)
-                 })
-         }, 10000)
-     }
+
+        axios.get('http://158.160.47.53:8081/api/v1/progress/test')
+            .then(resolve => {
+                console.log(resolve.data.data.slice(0,3))
+                setResponseData(JSON.stringify(resolve.data.data.slice(0,3)))
+            })
+            .catch(reject => {
+                console.log('catch:', reject);
+                setErrorMessage(JSON.stringify(reject.response.data.message))
+            })
+            .finally(() => {
+                setIsLoading(false)
+            })
+
+    }
 
     const computeModelSelectOptions = () => {
         let options: SelectOptionType[] = []
@@ -49,20 +51,30 @@ const TestPage: React.FC<TestPagePropsType> = (props) => {
         setModelSelectOptions(options)
     }
 
-    const clickHandler = () => {
-        axios.post(`http://158.160.47.53:8080/api/v1/test?model_version=${currentModel}&data_url=${urlValue}`)
+    const clickHandler = (values: any) => {
+        setIsLoading(true)
+        axios.post(`http://158.160.47.53:8081/api/v1/test?model_version=${values.currentModel}&data_url=${values.urlValue}`)
             .then(response => {
                 console.log(response);
                 startProgressCheck();
             })
             .catch(reject => {
                 console.log(reject)
+                setErrorMessage(JSON.stringify(reject.response.data.message))
+            })
+            .finally(() => {
+                setIsLoading(false)
             })
     }
 
-    const modelChangeHandler = (value: string) => {
-        setCurrentModel(value)
-    }
+    const onFinish = (values: any) => {
+        console.log('Success:', values);
+        clickHandler(values)
+    };
+
+    const onFinishFailed = (errorInfo: any) => {
+        console.log('Failed:', errorInfo);
+    };
 
     return (
         <div className={classes.container}>
@@ -71,24 +83,41 @@ const TestPage: React.FC<TestPagePropsType> = (props) => {
                     <ArrowLeftOutlined/>
                 </div>
             </NavLink>
-            <Input className={classes.input}
-                   placeholder='Zip archive url'
-                   onChange={(e) => setUrlValue(e.target.value)}
-                   value={urlValue}
-            />
-            <Select options={modelSelectOptions}
-                    onChange={modelChangeHandler}
-            />
-            <Button type='primary'
-                    onClick={clickHandler}
-                    className={classes.btn}
+            <Form form={form}
+                  onFinish={onFinish}
+                  onFinishFailed={onFinishFailed}
+                  autoComplete="off"
+                  className={classes.form}
             >
-                Test
-            </Button>
+                <Form.Item label="Link"
+                           name="urlValue"
+                           rules={[{required: true, message: 'Please input title'}]}
+                >
+                    <Input placeholder='Paste url to zip archive'/>
+                </Form.Item>
+                <Form.Item label="Model"
+                           name="currentModel"
+                           rules={[{required: true, message: 'Please input title'}]}
+                >
+                    <Select options={modelSelectOptions}
+                            placeholder="choose version"
+                    />
+
+                </Form.Item>
+                <Form.Item>
+                    <Button type='primary'
+                            htmlType='submit'
+                            className={classes.btn}
+                    >
+                        Test
+                    </Button>
+                </Form.Item>
+            </Form>
             <InfoBar
                 responseData={responseData}
                 page={'testPage'}
                 isLoading={isLoading}
+                errorMessage={errorMessage}
             />
         </div>
     )
